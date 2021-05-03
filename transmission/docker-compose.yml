@@ -1,0 +1,22 @@
+version: "2.1"
+services:
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Argentina/Buenos_Aires
+      - TRANSMISSION_WEB_HOME=/combustion-release/
+      - USER=${TUSER}
+      - PASS=${TPASS}
+      # - CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+    volumes:
+      - ./transmission-config:/config
+      - /mnt/k500GB/downloads/torrents:/downloads
+      - /mnt/k500GB/downloads:/watch
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped

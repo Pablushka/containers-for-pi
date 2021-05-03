@@ -1,0 +1,32 @@
+version: "2.1"
+services:
+  plex:
+    image: ghcr.io/linuxserver/plex
+    container_name: plex
+    # network_mode: host
+    privileged: true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - VERSION=docker
+      - UMASK_SET=022 #optional
+      - PLEX_CLAIM=${CLAIM}
+    volumes:
+      - /mnt/k500GB/plex/config:/config
+      - /mnt/k500GB/media_server/tv:/tv
+      - /mnt/k500GB/media_server/movies:/movies
+      - /mnt/k500GB/downloads/torrents/complete:/movies/torrents
+    restart: unless-stopped
+    networks:
+      lan:
+        ipv4_address: 192.168.1.7
+
+networks:
+  lan:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: "192.168.1.0/24"       
+          gateway: "192.168.1.1"
